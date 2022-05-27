@@ -2,7 +2,6 @@ package de.hbrs.team89.se1_starter_repo;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,16 +38,16 @@ public abstract class ParkhausServlet extends HttpServlet {
                 out.println( config() );
                 break;
             case "sum":
-                out.println( "sum = " + getSum() / 100);
+                out.println( "sum = " + getSum());
                 break;
             case "avg":
-                out.println("avg = " + (getSum() / getCounter()) / 100);
+                out.println("avg = " + (getSum() / getCarCounter()));
                 break;
             case "min":
-                out.println( "min = " + getMin() / 100 );
+                out.println( "min = " + getMin());
                 break;
             case "max":
-                out.println( "max = " + getMax() / 100 );
+                out.println( "max = " + getMax());
                 break;
             case "cars":
                 // TODO: Send list of cars stored on the server to the client.
@@ -70,6 +69,21 @@ public abstract class ParkhausServlet extends HttpServlet {
 
     /**
      * HTTP POST
+     *
+     * params:
+     * [0] enter / leave
+     * [1] nr
+     * [2] Einfahrts-Zeit in sekunden nach 1970 (Unix Timestamp)
+     * [3] Dauer in Sekunden (impl. Ausfahrts-Zeit)
+     * [4] Preis
+     * [5] Ticket hash-Wert
+     * [6] Farbe des Autos
+     * [7] Parkplatz-Nr.
+     * [8] Geschlecht
+     * [9] Auto-Typ (PKW, SUV, ...)
+     * [10] Kennzeichen
+     * [11] = [2] ???
+     * [12] Parkhaus (Etage) (=NAME)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -92,17 +106,25 @@ public abstract class ParkhausServlet extends HttpServlet {
                 out.println( locator( newCar ) );
                 break;
             case "leave":
+                // ToDo: Remove the right car from the list.
                 CarIF oldCar = cars().get(0);
-                cars().remove(0);// ToDo remove located car from list
+                cars().remove(0);
+
+                // Fetch the price
                 double price = 0.0d;
                 if ( params.length > 4 ){
                     String priceString = params[4];
                     if ( ! "_".equals( priceString ) ){
+                                                                                    // "\\D+" = 1 or more digit
                         price = (double)new Scanner( priceString ).useDelimiter("\\D+").nextInt();
-                        price /= 100.0d;  // just as Integer.parseInt( priceString ) / 100.0d;
-                        // store new sum in ServletContext
+                        price /= 100.0d;            // Convert to cents
+                        price = Math.floor(price);  // Cut off excess digits
+                        price /= 100.0d;            // Convert to euros
+
+                        // Store new sum in ServletContext
                         getContext().setAttribute("sum", getSum() + price );
-                        getContext().setAttribute("carCounter", getCounter() + 1);
+                        getContext().setAttribute("carCounter", getCarCounter() + 1);
+                        // Update minimum and maximum, if necessary
                         if (price < getMin()) {
                             getContext().setAttribute("min",price);
                         }
@@ -124,7 +146,6 @@ public abstract class ParkhausServlet extends HttpServlet {
                 break;
             default:
                 System.out.println( body );
-                // System.out.println( "Invalid Command: " + body );
         }
 
     }
@@ -205,7 +226,7 @@ public abstract class ParkhausServlet extends HttpServlet {
         return (sum == null) ? 0.0 : sum;
     }
 
-    private int getCounter(){
+    private int getCarCounter(){
         Integer carCounter;
         ServletContext app = getApplication();
         carCounter = (Integer) app.getAttribute("carCounter");
