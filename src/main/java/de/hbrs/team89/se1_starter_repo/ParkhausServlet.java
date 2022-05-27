@@ -38,16 +38,16 @@ public abstract class ParkhausServlet extends HttpServlet {
                 out.println( config() );
                 break;
             case "sum":
-                out.println( "sum = " + getSum());
+                out.println( "sum = " + getSum() / 100);
                 break;
             case "avg":
-                out.println("avg = " + (getSum() / getCarCounter()));
+                out.println("avg = " + (getSum() / getCarCounter()) / 100);
                 break;
             case "min":
-                out.println( "min = " + getMin());
+                out.println( "min = " + getMin() / 100);
                 break;
             case "max":
-                out.println( "max = " + getMax());
+                out.println( "max = " + getMax() / 100);
                 break;
             case "cars":
                 // TODO: Send list of cars stored on the server to the client.
@@ -119,7 +119,6 @@ public abstract class ParkhausServlet extends HttpServlet {
                         price = (double)new Scanner( priceString ).useDelimiter("\\D+").nextInt();
                         price /= 100.0d;            // Convert to cents
                         price = Math.floor(price);  // Cut off excess digits
-                        price /= 100.0d;            // Convert to euros
 
                         // Store new sum in ServletContext
                         getContext().setAttribute("sum", getSum() + price );
