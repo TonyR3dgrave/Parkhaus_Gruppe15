@@ -22,7 +22,6 @@ public abstract class ParkhausServlet extends HttpServlet {
     abstract String NAME(); // each ParkhausServlet should have a name, e.g. "Level1"
     abstract int MAX(); // maximum number of parking slots of a single parking level
     abstract String config(); // configuration of a single parking level
-
     /**
      * HTTP GET
      */
@@ -32,6 +31,7 @@ public abstract class ParkhausServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         String cmd = request.getParameter("cmd");
         System.out.println( cmd + " requested: " + request.getQueryString());
+
         switch ( cmd ){
             case "config":
                 // Overwrite Parkhaus config parameters
@@ -39,19 +39,16 @@ public abstract class ParkhausServlet extends HttpServlet {
                 out.println( config() );
                 break;
             case "sum":
-                // ToDo: insert algorithm for calculating sum here
-                out.println( "sum = server side calculated sum" );
+                out.println( "sum = " + getSum() / 100);
                 break;
             case "avg":
-                // ToDo
+                out.println("avg = " + (getSum() / getCounter()) / 100);
                 break;
             case "min":
-                // ToDo: insert algorithm for calculating min here
-                out.println( "min = server side calculated min" );
+                out.println( "min = " + getMin() / 100 );
                 break;
             case "max":
-                // ToDo: insert algorithm for calculating max here
-                out.println( "max = server side calculated max" );
+                out.println( "max = " + getMax() / 100 );
                 break;
             case "cars":
                 // TODO: Send list of cars stored on the server to the client.
@@ -89,13 +86,14 @@ public abstract class ParkhausServlet extends HttpServlet {
             case "enter":
                 CarIF newCar = new Car( restParams );
                 cars().add( newCar );
-                // System.out.println( "enter," + newCar );
+                System.out.println( "enter," + newCar );
 
                 // re-direct car to another parking lot
                 out.println( locator( newCar ) );
                 break;
             case "leave":
-                CarIF oldCar = cars().get(0);  // ToDo remove car from list
+                CarIF oldCar = cars().get(0);
+                cars().remove(0);// ToDo remove located car from list
                 double price = 0.0d;
                 if ( params.length > 4 ){
                     String priceString = params[4];
@@ -103,7 +101,14 @@ public abstract class ParkhausServlet extends HttpServlet {
                         price = (double)new Scanner( priceString ).useDelimiter("\\D+").nextInt();
                         price /= 100.0d;  // just as Integer.parseInt( priceString ) / 100.0d;
                         // store new sum in ServletContext
-                        // ToDo getContext().setAttribute("sum"+NAME(), getSum() + price );
+                        getContext().setAttribute("sum", getSum() + price );
+                        getContext().setAttribute("carCounter", getCounter() + 1);
+                        if (price < getMin()) {
+                            getContext().setAttribute("min",price);
+                        }
+                        if (price > getMax()) {
+                            getContext().setAttribute("max",price);
+                        }
                     }
                 }
                 out.println( price );  // server calculated price
@@ -156,9 +161,9 @@ public abstract class ParkhausServlet extends HttpServlet {
     }
 
     /**
-    * @param request the HTTP POST request
-    * @return the body of the request
-    */
+     * @param request the HTTP POST request
+     * @return the body of the request
+     */
     String getBody( HttpServletRequest request ) throws IOException {
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -187,5 +192,36 @@ public abstract class ParkhausServlet extends HttpServlet {
     @Override
     public void destroy() {
         System.out.println("Servlet destroyed.");
+    }
+
+
+    private ServletContext getApplication() {
+        return getServletConfig().getServletContext();
+    }
+    private double getSum() {
+        Double sum;
+        ServletContext app = getApplication();
+        sum = (Double) app.getAttribute("sum");
+        return (sum == null) ? 0.0 : sum;
+    }
+
+    private int getCounter(){
+        Integer carCounter;
+        ServletContext app = getApplication();
+        carCounter = (Integer) app.getAttribute("carCounter");
+        return (carCounter == null) ? 0 : carCounter;
+    }
+
+    private double getMin(){
+        Double min;
+        ServletContext app = getApplication();
+        min = (Double) app.getAttribute("min");
+        return (min == null) ? Double.MAX_VALUE : min;
+    }
+    private double getMax(){
+        Double max;
+        ServletContext app = getApplication();
+        max = (Double) app.getAttribute("max");
+        return (max == null) ? Double.MIN_VALUE : max;
     }
 }
