@@ -30,7 +30,7 @@ public class Car implements CarIF {
 
     @Override
     public int price() {
-        return Integer.parseInt(params[3]);
+        return Integer.parseInt(params[4]);
     }
 
     @Override
