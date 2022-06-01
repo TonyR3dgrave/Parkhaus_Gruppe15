@@ -110,9 +110,8 @@ public abstract class ParkhausServlet extends HttpServlet {
                 break;
             case "leave":
                 // ToDo: Remove the right car from the list.
-                CarIF oldCar = removeCarFromList( Integer.parseInt(restParams[0]) );
-
-                if (oldCar == null) System.out.println("Car " + restParams[0] + " not in cars list!");
+                CarIF oldCar = cars().get(0);
+                cars().remove(0);
 
                 // Fetch the price
                 double price = 0.0d;
@@ -247,17 +246,5 @@ public abstract class ParkhausServlet extends HttpServlet {
         ServletContext app = getApplication();
         max = (Double) app.getAttribute("max");
         return (max == null) ? Double.MIN_VALUE : max;
-    }
-
-    private CarIF removeCarFromList(int nr) {
-        List<CarIF> cars = cars();
-
-        for (CarIF car : cars) {
-            if (car.nr() == nr) {
-                cars.remove(car);
-                return car;
-            }
-        }
-        return null;
     }
 }
