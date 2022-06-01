@@ -26,6 +26,17 @@ public class JsonBuilder {
                 ).build();
     }
 
+    public JsonObject makePie(){
+        return Json.createObjectBuilder()
+                .add("data", Json.createArrayBuilder()
+                        .add(Json.createObjectBuilder()
+                                .add("value", makeJsonArray(x) )
+                                .add("labels", makeJsonArray(y))
+                                .add("type", "pie")
+                        )
+                ).build();
+    }
+
     public JsonArray makeJsonArray(List<?> input){
         JsonArrayBuilder arr = Json.createArrayBuilder();
         for (Object o : input) {

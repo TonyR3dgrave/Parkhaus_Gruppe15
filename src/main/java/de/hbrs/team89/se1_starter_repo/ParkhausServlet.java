@@ -61,7 +61,7 @@ public abstract class ParkhausServlet extends HttpServlet {
                 break;
             case "chart":
                 // TODO send chart infos as JSON object to client
-                JsonObject chart = new JsonBuilder(Car.Genders, new SpecificListBuilder(cars(),"Gender").makeSpecificList()).makeBar();
+                JsonObject chart = new JsonBuilder(Car.Genders, new SpecificListBuilder(cars(),"Gender").makeSpecificList()).makePie();
                 out.println(chart.toString());
                 break;
             default:
