@@ -119,7 +119,7 @@ public abstract class ParkhausServlet extends HttpServlet {
                 if ( params.length > 4 ){
                     String priceString = params[4];
                     if ( ! "_".equals( priceString ) ){
-                                                                                    // "\\D+" = 1 or more digit
+                        // "\\D+" = 1 or more digit
                         price = (double)new Scanner( priceString ).useDelimiter("\\D+").nextInt();
                         price /= 100.0d;            // Convert to cents
                         price = Math.floor(price);  // Cut off excess digits
