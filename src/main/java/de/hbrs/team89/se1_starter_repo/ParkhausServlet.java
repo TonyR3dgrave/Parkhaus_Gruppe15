@@ -110,15 +110,16 @@ public abstract class ParkhausServlet extends HttpServlet {
                 break;
             case "leave":
                 // ToDo: Remove the right car from the list.
-                CarIF oldCar = cars().get(0);
-                cars().remove(0);
+                CarIF oldCar = removeCarFromList( Integer.parseInt(restParams[0]) );
+
+                if (oldCar == null) System.out.println("Car " + restParams[0] + " not in cars list!");
 
                 // Fetch the price
                 double price = 0.0d;
                 if ( params.length > 4 ){
                     String priceString = params[4];
                     if ( ! "_".equals( priceString ) ){
-                                                                                    // "\\D+" = 1 or more digit
+                        // "\\D+" = 1 or more digit
                         price = (double)new Scanner( priceString ).useDelimiter("\\D+").nextInt();
                         price /= 100.0d;            // Convert to cents
                         price = Math.floor(price);  // Cut off excess digits
@@ -246,5 +247,17 @@ public abstract class ParkhausServlet extends HttpServlet {
         ServletContext app = getApplication();
         max = (Double) app.getAttribute("max");
         return (max == null) ? Double.MIN_VALUE : max;
+    }
+
+    private CarIF removeCarFromList(int nr) {
+        List<CarIF> cars = cars();
+
+        for (CarIF car : cars) {
+            if (car.nr() == nr) {
+                cars.remove(car);
+                return car;
+            }
+        }
+        return null;
     }
 }
