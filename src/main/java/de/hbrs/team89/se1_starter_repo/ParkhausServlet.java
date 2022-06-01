@@ -109,7 +109,6 @@ public abstract class ParkhausServlet extends HttpServlet {
                 out.println( locator( newCar ) );
                 break;
             case "leave":
-                // ToDo: Remove the right car from the list.
                 CarIF oldCar = removeCarFromList( Integer.parseInt(restParams[0]) );
 
                 if (oldCar == null) System.out.println("Car " + restParams[0] + " not in cars list!");

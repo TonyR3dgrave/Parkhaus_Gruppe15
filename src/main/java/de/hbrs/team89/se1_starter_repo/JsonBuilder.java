@@ -8,7 +8,6 @@ public class JsonBuilder {
     private final List<?> x;
     //Elements for the y-axis
     private final List<?> y;
-    private String name;
 
     public JsonBuilder(List<?> x, List<?> y){
         this.x = x;

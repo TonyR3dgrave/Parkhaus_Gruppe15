@@ -23,8 +23,8 @@ import java.util.List;
 public class Car implements CarIF {
     String[] params;
     public static final List<String> Genders = new ArrayList<>(){{
-        add("Female");
-        add("Male");
+        add("Frau");
+        add("Mann");
     }};
 
     public Car( String[] params ){
