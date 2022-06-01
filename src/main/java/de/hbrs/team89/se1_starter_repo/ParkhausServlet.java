@@ -1,5 +1,6 @@
 package de.hbrs.team89.se1_starter_repo;
 
+import javax.json.JsonObject;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -60,6 +61,8 @@ public abstract class ParkhausServlet extends HttpServlet {
                 break;
             case "chart":
                 // TODO send chart infos as JSON object to client
+                JsonObject chart = new JsonBuilder(Car.Genders, new SpecificListBuilder(cars(),"Gender").makeSpecificList()).makeBar();
+                out.println(chart.toString());
                 break;
             default:
                 System.out.println("Invalid Command: " + request.getQueryString());

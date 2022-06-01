@@ -54,7 +54,8 @@
                          name="Etage1"
                          license_max="15"
                          extra_buttons='["sum","min","max","avg"]'
-                         client_categories='["Frau"]'
+                         extra_charts='["chart"]'
+                         client_categories='["Frau","Male"]'
                          space_color='{"1":"pink"}'
                          vehicle_types='["PKW","SUV"]'
                          price_factor='{"SUV":2,"Family":0.5}'
