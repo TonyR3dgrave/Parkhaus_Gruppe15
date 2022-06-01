@@ -60,8 +60,8 @@ public abstract class ParkhausServlet extends HttpServlet {
                 // out.println("1/1648465400000/_/_/Ticket1/#0d1e0a/2/any/PKW/1,2/1648465499999/_/_/Ticket2/#dd10aa/3/any/PKW/2");
                 break;
             case "chart":
-                // TODO send chart infos as JSON object to client
-                JsonObject chart = new JsonBuilder(Car.Genders, new SpecificListBuilder(cars(),"Gender").makeSpecificList()).makePie();
+                List<?> genders = new SpecificListBuilder(cars(),"Gender").makeSpecificList();
+                JsonObject chart = new JsonBuilder(Car.Genders, genders).makePie();
                 out.println(chart.toString());
                 break;
             default:
