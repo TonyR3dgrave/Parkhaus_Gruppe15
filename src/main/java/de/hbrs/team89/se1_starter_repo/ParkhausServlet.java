@@ -61,7 +61,7 @@ public abstract class ParkhausServlet extends HttpServlet {
                 break;
             case "chart":
                 List<?> genders = new SpecificListBuilder(cars(),"Gender").makeSpecificList();
-                JsonObject chart = new JsonBuilder(Car.Genders, genders).makePie();
+                JsonObject chart = new JsonBuilder(Car.GENDERS, genders).makePie();
                 out.println(chart.toString());
                 break;
             default:
@@ -100,8 +100,8 @@ public abstract class ParkhausServlet extends HttpServlet {
         String[] restParams = Arrays.copyOfRange(params, 1, params.length);
 
         switch( event ){
-            case "enter":
-                CarIF newCar = new Car( restParams );
+            case "enter":               //nr,           gender,         type,           license
+                CarIF newCar = new Car(restParams[0], restParams[7], restParams[8], restParams[9] );
                 cars().add( newCar );
                 System.out.println( "enter," + newCar );
 

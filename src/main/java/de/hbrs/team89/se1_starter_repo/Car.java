@@ -21,60 +21,40 @@ import java.util.List;
  */
 
 public class Car implements CarIF {
-    String[] params;
-    public static final List<String> Genders = new ArrayList<>(){{
+    public static final List<String> TYPES = new ArrayList<>() {{
+        add("PKW");
+        add("SUV");
+    }};
+    public static final List<String> GENDERS = new ArrayList<>() {{
         add("Frau");
         add("Mann");
     }};
+    private final String gender, type, license;
+    private final int nr;
 
-    public Car( String[] params ){
-        this.params = params;
-    }
-
-    @Override
-    public int nr() {
-        return Integer.parseInt(params[0]);
-    }
-
-    @Override
-    public long begin() {
-        return Long.parseLong(params[1]);
-    }
-
-    @Override
-    public long end() {
-        // End = Begin (Unix Timestamp) + Duration (Seconds)
-        return Long.parseLong(params[1]) + Long.parseLong(params[2]);
-    }
-
-    @Override
-    public int duration() {
-        return Integer.parseInt(params[2]);
-    }
-
-    @Override
-    public int price() {
-        return Integer.parseInt(params[3]);
-    }
-
-    public int space() {
-        return Integer.parseInt(params[6]);
+    public Car(String nr, String gender, String type, String license) {
+        this.nr = Integer.parseInt(nr);
+        this.gender = gender;
+        this.type = type;
+        this.license = license;
     }
 
     public String gender() {
-        return params[7];
+        return gender;
     }
 
     public String type() {
-        return params[8];
+        return type;
     }
 
     public String license() {
-        return params[9];
+        return license;
     }
+
+    public int nr() { return nr; }
 
     @Override
     public String toString(){
-        return Arrays.toString( params );
+        return Arrays.toString( new String[] {gender, type, license} );
     }
 }
