@@ -5,8 +5,8 @@ public class Ticket {
     private double preis;
     private long unixEnter, unixLeave;
 
-    public Ticket(int nr, long unixEnter) {
-        this.nr = nr;
+    public Ticket(String nr, long unixEnter) {
+        this.nr = Integer.parseInt(nr);
         this.unixEnter = unixEnter;
     }
 
@@ -32,10 +32,20 @@ public class Ticket {
         return (unixLeave != 0L) ? (unixLeave - unixEnter) : ( (System.currentTimeMillis() / 1000L) - unixEnter );
     }
 
+    //region Getter
     /**
      * Gibt den berechneten Preis fuer die [aktuelle] Parkdauer an.
      */
     public double getPreis() {
         return preis;
     }
+
+    public long getUnixEnter() {
+        return unixEnter;
+    }
+
+    public long getUnixLeave() {
+        return unixLeave;
+    }
+    //endregion
 }

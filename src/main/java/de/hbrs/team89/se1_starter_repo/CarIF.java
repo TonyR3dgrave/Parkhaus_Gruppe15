@@ -4,6 +4,5 @@ package de.hbrs.team89.se1_starter_repo;
     String gender();
     String type();
     String license();
-
     int nr();
 }

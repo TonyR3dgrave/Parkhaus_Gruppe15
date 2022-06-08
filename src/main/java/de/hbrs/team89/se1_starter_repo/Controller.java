@@ -4,14 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
-    Model parkhauslogik;
-    List<View> viewList;
+    private Model parkhauslogik;
+    private List<View> viewList;
 
     public Controller() {
         this.parkhauslogik = new Model();
-        this.viewList = new ArrayList<View>(){{
-
+        this.viewList = new ArrayList<View>() {{
+            add(new View1());
+            add(new View2());
+            add(new View3());
         }};
+
+        viewsSubscribe();
     }
 
     //region parkhauslogik
@@ -25,10 +29,20 @@ public class Controller {
     }
     //endregion
 
-    public void subscribe(){
+    public void viewsSubscribe(){
         for (View v : viewList) {
             v.subscribe(parkhauslogik);
         }
     }
 
+    //region Getter
+    public Model getParkhauslogik() {
+        return parkhauslogik;
+    }
+
+    public List<View> getViewList() {
+        return viewList;
+    }
+    //endregion
 }
+
