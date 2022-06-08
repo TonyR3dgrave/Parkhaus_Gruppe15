@@ -3,7 +3,7 @@ package de.hbrs.team89.se1_starter_repo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Model {
+public class Model extends Publisher{
     //ToDo: Überlegen, wie man das ganze abstrahiert.
     private List<Parkplatz> parkplaetze;
     private List<Ticket> tickets;
@@ -16,10 +16,12 @@ public class Model {
     }
 
     /**
-        Fuegt ein Auto der Liste der parkenden Autos hinzu (ENTER).
+        Fügt ein Auto der Liste der parkenden Autos hinzu (ENTER).
      */
-    public void enter(CarIF car, Ticket ticketIF) {
+    public void enter(CarIF car, Ticket ticket) {
         cars.add(car);
+        tickets.add(ticket);
+        update();
     }
 
     /**
@@ -37,40 +39,18 @@ public class Model {
                 cars.remove(car);
             }
         }
+        update();
     }
 
-    /**
-        Sucht den groessten Preis eines Tickets und gibt diesen zurueck.
-     */
-    public double getMax() {
-        double max = Double.MIN_VALUE;
-        for (Ticket ticket : tickets) {
-            double preis = ticket.getPreis();
-            if (preis > max) {
-                max = preis;
-            }
-        }
-        return max;
+    public List<Parkplatz> getParkplaetze() {
+        return parkplaetze;
     }
 
-    /**
-        Sucht den kleinsten Preis eines Tickets und gibt diesen zurueck.
-     */
-    public double getMin() {
-        double min = Double.MAX_VALUE;
-        for (Ticket ticket : tickets) {
-            double preis = ticket.getPreis();
-            if (preis < min) {
-                min = preis;
-            }
-        }
-        return min;
+    public List<Ticket> getTickets() {
+        return tickets;
     }
 
-    /**
-     * Gibt die Anzahl der aktuell parkenden Autos wieder
-     */
-    public int getTotalCars() {
-        return cars.size();
+    public List<CarIF> getCars() {
+        return cars;
     }
 }
