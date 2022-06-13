@@ -1,24 +1,38 @@
 package de.hbrs.team89.se1_starter_repo;
 
+import java.util.List;
+
 public class View3 extends View{
-    double view = 0;
     int ticketNr = -1;
 
-    double getView(){ return view; }
-
     /**
-        Sucht das Ticket mit der Nummer <i>ticketNr</i> und setzt als view dessen Preis.
-        Falls kein Ticket mit dieser Nummer gefunden wurde, bleibt der berechnete Preis <i>view</i> auf 0,00€.
+     * Zieht sich die Ticket-Liste
      */
     @Override
-    public void update() {
-        for (Ticket t : ((Model)model).getTickets() ) {
-            if (t.getNr() == ticketNr) {
-                view = t.getPreis();
-                return;
+    public List<?> fetchList() {
+        return ((Model) model).getTickets();
+    }
+
+    /**
+     * Zieht sich den Preis der jeweiligen Ticket-Nr. aus der Ticket-Liste und gibt diese wieder. <br>
+     * Falls diese nicht gefunden wurde, ist der Rückgabewert standardmaessig -1.0.
+     */
+    @Override
+    public Number getRelevantData(List<?> list) {
+        for (Object o : list) {
+            if (((Ticket) o).getNr() == ticketNr) {
+                return ((Ticket) o).getPreis();
             }
         }
-        view = 0;
+        return -1.0;
+    }
+
+    /**
+     * Aktualisiert die View mit der relevanten reduzierten Zahl n
+     */
+    @Override
+    public void updateView(Number n) {
+        view = "" + n;
     }
 
     /**
